@@ -1,4 +1,4 @@
-import React, { useEffect, createRef, useState } from "react";
+import React, { useEffect, createRef } from "react";
 import { Container } from "./style";
 
 class Point {
@@ -14,13 +14,8 @@ class Point {
 
 function Canvas() {
   const canvasRef: any = createRef();
-  const [cHeight, setCHeight] = useState<number>();
-  const [cWidth, setCWidth] = useState<number>();
-
 
   useEffect(() => {
-
-
     const startAnimation = () => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
@@ -38,11 +33,19 @@ function Canvas() {
         },
         false
       );
+      document.addEventListener(
+        "mousedown",
+        ({ clientX, clientY }) => {
+          addPoint(clientX - canvas?.offsetLeft, clientY - canvas?.offsetTop);
+        },
+        false
+      );
+
       const animatePoints = () => {
-        ctx.canvas.width  = window.innerWidth;
+        ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        const duration = (0.7 * (1 * 2000)) / 60; 
+        const duration = (0.7 * (1 * 2000)) / 60;
 
         for (let i = 0; i < points.length; ++i) {
           const point = points[i];
@@ -67,34 +70,34 @@ function Canvas() {
             const blue = Math.floor(210 + 210 * lifePercent);
             ctx.strokeStyle = `rgb(${red},${green},${blue}`;
 
-
-
             const generatePoint = (offset: number) => {
-                let pt;
+              let pt;
 
-                if (points[i-offset] !== undefined) {
-                    pt = points[i-offset];
-                } else pt = point;  
+              if (points[i - offset] !== undefined) {
+                pt = points[i - offset];
+              } else pt = point;
 
-                return pt
-            }
+              return pt;
+            };
 
             ctx.beginPath();
 
-            for(let z = 1; z < 3; z+=1){
-                let p1 = generatePoint(z-1);
-                let p2 = generatePoint(z);
-                const r = (Math.random() - 0.5) * 10;
-                ctx.bezierCurveTo(p2.x+r, p2.y+r, p1.x+r, p1.y+r, point.x+r, point.y+r)
+            for (let z = 1; z < 3; z += 1) {
+              let p1 = generatePoint(z - 1);
+              let p2 = generatePoint(z);
+              const r = (Math.random() - 0.5) * 10;
+              ctx.bezierCurveTo(
+                p2.x + r,
+                p2.y + r,
+                p1.x + r,
+                p1.y + r,
+                point.x + r,
+                point.y + r
+              );
             }
-
-
-
 
             ctx.stroke();
             ctx.closePath();
-
-
           }
         }
         requestAnimationFrame(animatePoints);
@@ -102,14 +105,11 @@ function Canvas() {
       animatePoints();
     };
 
-    setCHeight(document.body.clientHeight);
-    setCWidth(document.body.clientWidth);
-
     // If the device supports cursors, start animation.
     if (matchMedia("(pointer:fine)").matches) {
       startAnimation();
     }
-  }, []);
+  }, [canvasRef]);
 
   return <Container ref={canvasRef} />;
 }
