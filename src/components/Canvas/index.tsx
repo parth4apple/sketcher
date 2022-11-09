@@ -39,6 +39,8 @@ function Canvas() {
         false
       );
       const animatePoints = () => {
+        ctx.canvas.width  = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         const duration = (0.7 * (1 * 2000)) / 60; 
 
@@ -109,7 +111,7 @@ function Canvas() {
     }
   }, []);
 
-  return <Container ref={canvasRef} width={cWidth} height={cHeight} />;
+  return <Container ref={canvasRef} />;
 }
 
 export default Canvas;
