@@ -45,7 +45,7 @@ function Canvas() {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        const duration = (0.7 * (1 * 2000)) / 60;
+        const duration = (0.5 * (1 * 2000)) / 60;
 
         for (let i = 0; i < points.length; ++i) {
           const point = points[i];
@@ -59,15 +59,15 @@ function Canvas() {
             // Otherwise animate it:
             // As the lifetime goes on, lifePercent goes from 0 to 1.
             const lifePercent = point.lifetime / duration;
-            const spreadRate = 5 * (1 - lifePercent);
+            const spreadRate =  5 * (1 - lifePercent);
 
             ctx.lineJoin = "round";
             ctx.lineWidth = spreadRate;
 
             // As time increases decrease r and b, increase g to go from purple to green.
-            const red = Math.floor(190 - 190 * lifePercent);
-            const green = 0;
-            const blue = Math.floor(210 + 210 * lifePercent);
+            const red = 255;
+            const green = Math.floor(255 - 73 * lifePercent);
+            const blue = Math.floor(255 + 62 * lifePercent);
             ctx.strokeStyle = `rgb(${red},${green},${blue}`;
 
             const generatePoint = (offset: number) => {
@@ -85,7 +85,7 @@ function Canvas() {
             for (let z = 1; z < 3; z += 1) {
               let p1 = generatePoint(z - 1);
               let p2 = generatePoint(z);
-              const r = (Math.random() - 0.5) * 10;
+              const r = (Math.random() - 0.5) * 5;
               ctx.bezierCurveTo(
                 p2.x + r,
                 p2.y + r,
